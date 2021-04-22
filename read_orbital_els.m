@@ -1,6 +1,6 @@
 % Quick script to read orbital elements (as structured in
 % year1/162p_orbital_els.py)
-% Call function to calculate sub-earth latitude
+% Also calls function to calculate sub-earth latitude
 
 %%
 file_dir = "~/Documents/year1/";

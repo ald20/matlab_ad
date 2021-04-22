@@ -1,4 +1,5 @@
 %% Basic handling of models and lightcurves
+% Requires AR matlab scripts
 % Clean the workspace (use command+enter to evaluate current cell)
 
 close all

@@ -1,5 +1,6 @@
 %% AD 02-02-2021
 % Script to call AR_mypolyhedral.m function
+% Requires use of AR's matlab scripts for functionality
 
 %% Read in the .obj file
 
