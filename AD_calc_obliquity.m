@@ -1,5 +1,6 @@
-% Quick script to calculate obliquity of 67P
-% Based on calculations from Rozek 2017 PhD thesis appendix B.2
+% Quick script to calculate obliquity and argument of sub solar meridian at perihelion of 67P
+% Based on calculations from Rozek 2017 PhD thesis appendix B.2 & Sekanina
+% 1981
 
 %% Defining variables
 % OSIRIS team rotation pole measurements:
@@ -12,7 +13,7 @@ lam = 78.1;
 bet = 41.5;
 
 %% Orbital params
-(epoch 2015)
+%(epoch 2015)
 % e = 0.5404;
 % omega = 308.58;
 % asc_node = 214.53;

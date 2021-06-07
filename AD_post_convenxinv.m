@@ -8,13 +8,13 @@ target='162p'
 
 % root_dir: folder containing current work & pictures folder
 root_dir='~/Documents/Year1/shape_modelling/162p/'
-directory=[root_dir 'pole_scan/run_0_-90_2021_02_02_14_59_15/' ]
+directory=[root_dir 'rel_combined_pole_scan/run_0_-90_2021_06_02/' ]
 
 % Change to select which model is to be used - this part will be appended
 % to file names!
 
 % lam_beta:
-modstr='105_0'
+modstr='200_-80'
 % object file:
 objfilename = [directory target '_' modstr '.obj']
 parfilename = [directory 'output_convex_pars_' modstr ]
@@ -29,9 +29,14 @@ parfilename = [directory 'output_convex_pars_' modstr ]
 
 %% Set parameters rho and reff from literature:
 
-rho = 2000 
+rho = 4000 
 reff=7 %km
 
 %% Call AR_mypolyhedral function:
 
 [results] = AR_mypolyhedral(V,F,rho,reff);
+
+% print axial ratios a/b, b/c:
+
+axial_ab = (results.a)/(results.b)
+axial_bc = results.b/results.c
