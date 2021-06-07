@@ -1,3 +1,4 @@
+162P_lat_phase.pdf
 AR_calcFN.m*
 AR_mypolyhedral.m*
 Lightcurve_Generator_Conv_v3.m
@@ -8,6 +9,7 @@ convex_inversion_handling_162p.m
 datefromjd.m*
 errbar.m*
 fits_fromLCres_function.m*
+mArrow3.m
 pault_colormap.m
 plot_chi_plane.m
 plot_chibowl_from_convexinv.m
