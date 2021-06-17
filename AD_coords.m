@@ -53,14 +53,10 @@ C_Cc = [ x_Cc'; y_Cc'; z_Cc' ];
 C_cC = [ x_Cc'; y_Cc'; z_Cc' ]';
 
 % Perifocus of planet's orbit (in Earth-based ecliptic coordinates):
-P_c = [ (cosd(asc_node)*cosd(omega))-(sind(asc_node)*sind(omega)*cosd(inc)); (cosd(asc_node)*sind(omega)*cosd(inc))+(sind(asc_node)*cosd(omega)); sind(omega)*sind(inc) ];
+%P_c = [ (cosd(asc_node)*cosd(omega))-(sind(asc_node)*sind(omega)*cosd(inc)); (cosd(asc_node)*sind(omega)*cosd(inc))+(sind(asc_node)*cosd(omega)); sind(omega)*sind(inc) ];
+%P_C = C_Cc*P_c;
 
-P_C = C_Cc*P_c;
-
-% Planet-based ecliptic longitude of the perifocus:
-weird_pi = atan2(P_C(2), P_C(1));
-weird_pi = rad2deg(weird_pi);
-
+% Vector to convert earth-based ecliptic to planet-Y based equatorial
 C_Qc = [ x_Qc'; y_Qc'; z_Qc' ];
 C_cQ = C_Qc';
 
