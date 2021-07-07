@@ -13,7 +13,7 @@ clc;
 
 % Run the first one, two or all three of these tasks by changing the ntask
 % variable
-ntask = 3;
+ntask = 0;
 
 target='162p'
 date='20210705'
@@ -25,7 +25,6 @@ date='20210705'
 
 root_dir='~/Documents/Year1/shape_modelling/162p/mc_lcs/MC_trials/'
 directory = [ root_dir 'pole_scam/run_0_-90_2021_07_06_14_00_03/' ] 
-
 %% Read in the lightcurve
  
 lcdir = '~/Documents/year1/shape_modelling/162p/mc_lcs/MC_trials/'
@@ -50,7 +49,6 @@ modstr='300_30';
 % object file:
 objfilename = [directory target '_' modstr '.obj'];
 parfilename = [directory 'output_convex_pars_' modstr ];
-
 %% Read-in the convex shape model
 
 % Read vertices and facets:
