@@ -1,0 +1,1 @@
+function [results] = AD_generate_obsLC_from_model(Fn,FNA,shadows,LCSfileVariable,T0,lambda,beta,P,omega,B0,gF,hwidth,rough,x,yorp,dataset,lightcurveNo,phi,bests
