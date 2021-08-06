@@ -20,5 +20,4 @@ plot_shifted_LC_162p.m
 read_model_from_par_file.m
 read_vertices_and_faces_from_obj_file.m*
 sky_spheres_chi.m
-test_matlab.m
 test_sim_eqs.m

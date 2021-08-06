@@ -13,32 +13,32 @@ clc;
 
 % Run the first one, two or all three of these tasks by changing the ntask
 % variable
-ntask = 3;
+ntask = 2;
 
-target='162p'
-date='20210705'
+target='162P'
+date='20210723'
 
 % root_dir: folder containing current work & pictures folder
 % lc_generator saves images into root_dir/pictures/artifical_lcs
 % Change to select which model is to be used - this part will be appended
 % to file names!
 
-root_dir='~/Documents/Year1/shape_modelling/162p/mc_lcs/MC_trials/'
-directory = [ root_dir 'pole_scam/run_0_-90_2021_07_06_14_00_03/' ] 
+root_dir='~/Documents/year1/shape_modelling/162p/'
+directory = [ root_dir 'dist_cal_pole_scan/pole_scan_k_-1.8_free/small_grids/run_280_10_convergence/' ] 
 
 %% Read in the lightcurve
  
-lcdir = '~/Documents/year1/shape_modelling/162p/mc_lcs/MC_trials/'
+lcdir = '~/Documents/year1/shape_modelling/162p/'
 lctarget = '162P'
-lcfile='dist_cal_MC_NU'
+lcfile='LC_dist_cal_NU'
 lcfilename= strcat(lcdir, lctarget,'_', lcfile, '.dat' );
 
 % Directory in which to save artificial lcs (2xN_LCs generated if lc=0)
-alc_pics = [ root_dir 'pictures/' date '/artificial_lcs/' ]
-
-if ~exist(alc_pics, 'dir')
-    mkdir(alc_pics)
-end
+% alc_pics = [ root_dir 'pictures/' date '/artificial_lcs/' ]
+% 
+% if ~exist(alc_pics, 'dir')
+%     mkdir(alc_pics)
+% end
 
 %% Read in the .obj file
 
@@ -46,7 +46,7 @@ end
 % to file names!
 
 % lam_beta:1.5611
-modstr='300_30';
+modstr='300_38';
 % object file:
 objfilename = [directory target '_' modstr '.obj'];
 parfilename = [directory 'output_convex_pars_' modstr ];
@@ -103,7 +103,26 @@ end
      alignx=0;
 
 
+     %[ filename, plotfigure ] = plot_shape_publication(V, F, root_dir, target, modstr, date, diffstr, specularstr, alignx);
      plot_shape_publication(V, F, root_dir, target, modstr, date, diffstr, specularstr, alignx);
+
+     % To plot with black background, uncomment the rest of the commands
+     % below:
+     
+%      figure(plotfigure.Number)
+%      %set(0,'DefaultAxesColor','black')
+%      set(gca,'color','black')
+%      %set(gcf, 'color','black')
+%      
+%      filename=[ filename '_dark']
+%      
+%      %set(0,'DefaultAxesColor','white')
+%      
+%      print(plotfigure,'-dpng','-r600',filename);
+     %print(plotfigure,'-dpdf','-r600','-fillpage',filename);
+     
+     
+ 
  end
 
 % %% Plot the model in the publication-ready format 

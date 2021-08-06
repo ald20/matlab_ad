@@ -60,7 +60,7 @@ while i<=NoOfCurves
 
 end
 
-Npoints = Npoints'
+Npoints = Npoints';
 
 end
 
