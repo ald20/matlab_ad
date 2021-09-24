@@ -22,7 +22,7 @@ asc_node = els(:,2);
 
 %% Rotation pole (ecliptic coordinates):
 lam_p = 300;
-bet_p = 70;
+bet_p = 38;
 
 lats = [ 1 size(epochs) ];
 
@@ -31,18 +31,30 @@ for i=1:size(epochs)
 end
 
 % Data for the 1-1-2022: 
-ra_jan = 192.7969;
-dec_jan = 17.7512;
-phase_jan = 16.2409;
+ra_jan = 192.7999;%192.7969;
+dec_jan = 17.7526%17.7512;
+phase_jan = 16.23%16.2409;
+inc_jan = 27.478;%22.94927;
+asc_node_jan = 30.914;%4.273909;
+omega_jan = 357.361;%10.360803;
 
-inc_jan = 22.94927;
-asc_node_jan = 4.273909;
-omega_jan = 10.360803;
+
+% Data for 2-3-2022:
+ra_mar = 188.0;
+dec_mar = 22.1
+phase_mar = 7.0662
+inc_mar = 27.485;
+asc_node_mar = 30.09;
+omega_mar = 357.341;
 
 lat_jan = AD_coords(lam_p, bet_p, asc_node_jan, omega_jan, inc_jan, ra_jan, dec_jan)
+lat_mar = AD_coords(lam_p, bet_p, asc_node_mar, omega_mar, inc_mar, ra_mar, dec_mar)
 
 phase(19) = phase_jan
 lats(19) = lat_jan
+
+phase(20) = phase_mar
+lats(20) = lat_mar
 
 %,'MarkerFaceColor', '[0.4 1 0.9]'
 fontsize=18;

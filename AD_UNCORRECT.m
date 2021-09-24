@@ -1,56 +1,20 @@
-root_dir = '/Users/s1523386/Documents/year1/shape_modelling/67p/';
-date='20210805_3k'
+function results = AD_UNCORRECT(root_dir,date,target,obj_filename,V,F,FN,FNA,T0,lambda,beta,P,omega,gF,B0,hwidth,rough,lcfile,lcfilename,NUflag,magflag,lcid,ylims,x,plot_artificial_lcs)
 
-% Object name params
-target = '67P';
-%obj_filename = strcat(target,'_',int2str(lam),'_', int2str(bet),namecore,'.obj');
+% This function generates artificial lightcurves for a given shape model
+% At the epochs listed, and calculates the relative magnitude shift 
+% Required for each epoch.
 
-obj_filename = 'cg_spc_shap8_003k_cart.wrl'
-obj_file = [ root_dir, obj_filename ];
-
-% Read vertices and facets:
-[V,F]=read_vertices_and_faces_from_wrl_file(obj_file,4);
-
-% Change this if you're using wrl (starts at 0) vs obj (starts at 1)
-% Calculate facet normals and facet areas
-[FN,FNA]=AR_calcFN_wrl(V,F);
-F = F+1;
-
-%% Artificial LCs for non-convex shape model
-
-% Set up the spin-state completely manually
-%model.t0 = 2452709 % From Rozek PhD thesis
-model.t0 = 2459953
-model.lam = 79;
-model.bet = 42;
-model.p= 12.4041 % SHAP8 val
-model.nu= 0; %YORP
-% Hapke scattering factors: Fornasier 2015 649nm (SPG)
-model.omega = 0.045;
-model.gF = -0.41;
-model.B0 = 1.97;
-model.hwidth  = 0.026;
-model.rough = 15
 
 %% Read in lightcurve
 
 directory=root_dir;
-lcfile='LC_LSST_ALL_NU_dummy';
-lcfilename= strcat(directory, target,'_', lcfile, '.dat' );
-
-NUflag=1;
-magflag=0;
-
 [ LCS_all, npoints ] = MikkoRead_AD(lcfilename,NUflag,magflag);
 
 % How many lightcurves are read in?
 lcmax=max(LCS_all(:,9));
 
-
 %% Generate an example lightcurve 
-lcid=0;
-ylims=1;
-x = 4; % Lommel-Seeliger scattering
+
 % Define artificial LC filename based on which scattering model is used
 if x==3
     scatt_name = '_lam';
@@ -62,9 +26,6 @@ if x==5
     scatt_name = '_hapke';
 end
 
-% Declare if you want this to plot everything you asked it to...
-plot_artificial_lcs = 0;
-
 modstr = lcfile;
 % With a non-convex shape
 namecore=[target '_' lcfile '_' date scatt_name ];
@@ -73,20 +34,10 @@ Fn = FN;
 FNA = FNA;
 shadows = ShadowingGeometry(V,F,Fn);
 LCSfileVariable = LCS_all;
-T0 = model.t0;
-lambda = model.lam;
-beta = model.bet;
-P = model.p;
-omega = model.omega;
-B0 = model.B0;
-gF = model.gF;
-hwidth = model.hwidth;
-rough = model.rough;
 yorp = 0;
 dataset = namecore;
 lightcurveNo = lcid;
 phi = 0;
-bestscalingFixed = 0.1;
 ylims = ylims;
 dir = root_dir;
 
@@ -640,7 +591,7 @@ sizeFN=size(FNA);
        ymin=-ymax;
    
        
-      plot(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),2),(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),x)),'Color','black');
+      plot(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),2),(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),x)), 'Color','black');
        set(gca,'TickLabelInterpreter','latex')
 
        set(gca,'FontName','Helvetica','FontSize',16);
@@ -650,12 +601,12 @@ sizeFN=size(FNA);
 
        %Plot the observed data
 
-       %errbar(LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,12),LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,10),LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,11),'Color', CBred);
-       plot(LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,12),LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,10),'o','LineStyle','none','MarkerFaceColor',CBred, 'Color',CBred);
+       %errbar(LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,12),LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,10),LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,11),'Color', [0.6350 0.0780 0.1840]);
+       plot(LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,12),LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,10),'x','LineStyle','none','LineWidth',1.1, 'MarkerFaceColor',CBblue, 'Color',CBblue, 'Markersize', 12);
 
       % plot the individual brightnesses calculated for each distinct epoch
       % should lie on the LC
-       plot(matrixForThePurposeOfScaling(matrixForThePurposeOfScaling(:,7)==lightcurveNo,2),matrixForThePurposeOfScaling(matrixForThePurposeOfScaling(:,7)==lightcurveNo,x),'o','LineStyle','none','MarkerFaceColor',CBgreen, 'Color',CBgreen);
+       plot(matrixForThePurposeOfScaling(matrixForThePurposeOfScaling(:,7)==lightcurveNo,2),matrixForThePurposeOfScaling(matrixForThePurposeOfScaling(:,7)==lightcurveNo,x),'o','LineStyle','none','MarkerFaceColor',CBred, 'Color',CBred);
        hold off
 
        %How many datapoints have been used so far
@@ -686,10 +637,9 @@ sizeFN=size(FNA);
           
           
         text(0.56,0.06,['Aspect Angle = $' num2str(aspect(lightcurveNo),'%.1f') '^{\circ}$'],'Interpreter','latex','FontName','Helvetica','FontSize',12,'Units','normalized')
-       
-        text(0.06,0.06,['Phase Angle = $' num2str(phaseangle(lightcurveNo)*180/pi,'%.2f') '^\circ$'],'Interpreter','latex','FontName','Helvetica','FontSize',12,'Units','normalized')
+        text(0.56,0.12,['Phase Angle = $' num2str(phaseangle(lightcurveNo)*180/pi,'%.2f') '^\circ$'],'Interpreter','latex','FontName','Helvetica','FontSize',12,'Units','normalized')
 
-
+        %text(0.06,0.06,['Phase Angle = $' num2str(phaseangle(lightcurveNo)*180/pi,'%.2f') '^\circ$'],'Interpreter','latex','FontName','Helvetica','FontSize',12,'Units','normalized')
         text(0.06,0.94,['Model Peak-to-peak = $' num2str(ymaxModel(ids(x))-yminModel(ids(x)),'%.2f') '^m$'],'Interpreter','latex','FontName','Helvetica','FontSize',12,'Units','normalized')
 
         %Reverse the direction of the yaxis
@@ -714,16 +664,14 @@ end
 
 toc
 
-bestscaling=0
 %Various output parameters.  Artifical lightcurve is returned etc.
 %phasedDatareturnMatrix(1,:) = [];
 %results.phasedCurve(1,:) = [];
 %correction = sortrows(correction,1);
 % results.correction=correction;
 results.pointOnLightCurve = pointOnLC'
-results.bestscaling = bestscaling;
-results.datapoints = phasedDatareturnMatrix;
-results.MikkoFile = LCSfileVariable;
+%results.datapoints = phasedDatareturnMatrix;
+%results.MikkoFile = LCSfileVariable;
 results.phaseangle = phaseangle;
 results.aspectAngle = aspect;
 

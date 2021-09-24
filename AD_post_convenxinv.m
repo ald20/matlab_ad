@@ -13,10 +13,10 @@ clc;
 
 % Run the first one, two or all three of these tasks by changing the ntask
 % variable
-ntask = 2;
+ntask = 1;
 
 target='162P'
-date='20210723'
+date='20210907'
 
 % root_dir: folder containing current work & pictures folder
 % lc_generator saves images into root_dir/pictures/artifical_lcs
@@ -24,7 +24,7 @@ date='20210723'
 % to file names!
 
 root_dir='~/Documents/year1/shape_modelling/162p/'
-directory = [ root_dir 'dist_cal_pole_scan/pole_scan_k_-1.8_free/small_grids/run_280_10_convergence/' ] 
+directory = [ root_dir ]%'dist_cal_pole_scan/pole_scan_k_-1.8_free/small_grids/run_280_10_convergence/' ] 
 
 %% Read in the lightcurve
  
@@ -49,15 +49,27 @@ lcfilename= strcat(lcdir, lctarget,'_', lcfile, '.dat' );
 modstr='300_38';
 % object file:
 objfilename = [directory target '_' modstr '.obj'];
-parfilename = [directory 'output_convex_pars_' modstr ];
+parfilename = [directory 'output_convex_pars_' modstr '_BS' ];
+
+% If plotting nononvex wrl file: include n, the number of digits in the
+% number of facets
+% e.g. 3k facets: =4
+n=4;
 
 %% Read-in the convex shape model
 
 % Read vertices and facets:
-[V,F]=read_vertices_and_faces_from_obj_file(objfilename);
+
+if (objfilename(length(objfilename)-2:length(objfilename))=='obj')
+    [V,F]=read_vertices_and_faces_from_obj_file(objfilename)
+else
+    [V,F]=read_vertices_and_faces_from_wrl_file(objfilename,n);
+    F = F+1;
+end
 
 % Calculate facet normals and facet areas
 [FN,FNA]=AR_calcFN(V,F);
+
 
 %% Set parameters rho and reff from literature:
 
