@@ -3,6 +3,7 @@ AR_calcFN.m*
 AR_mypolyhedral.m*
 basics_tutorial_162p.m
 Lightcurve_Generator_Conv_v3.m
+Lightcurve_Generator_NonConv_ASF_v3.m
 MikkoRead_v2.m
 basics_tutorial_162p.m
 chi_read_from_convexinv.m

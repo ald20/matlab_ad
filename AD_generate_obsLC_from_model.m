@@ -2,7 +2,7 @@
 % point on rotational lightcurve.
 
 root_dir = '/Users/s1523386/Documents/year1/shape_modelling/67p/';
-date='20210924_3k';
+date='20210928_3k_ASF';
 % Object name params
 target = '67P';
 
@@ -48,13 +48,17 @@ rough = model.rough;
 lcfile='LC_LSST_ALL_NU_dummy';
 directory=root_dir;
 lcfilename= strcat(directory, target,'_', lcfile, '.dat' );
-NUflag=1;
-magflag=0;
+NUflag=1;     % If you're using Mikkoformat w/o units (if dummy: =1)
+magflag=0;    % 0 if using intensities in Mikkofile
 lcid=238; % 0 for all poss or number for that LC
 ylims=1;
-x = 3; % Lommel-Seeliger scattering (3,4,5 = Lam,LS,Hapke)
+x = 5; % (3,4,5 = Lam,LS,Hapke: LEAVE AS HAPKE, script plots all models)
 
 % Declare if you want this to plot everything you asked it to...
 plot_artificial_lcs = 1;
 
-results = AD_UNCORRECT(root_dir,date,target,obj_filename,V,F,FN,FNA,model.t0,model.lam,model.bet,model.p,model.omega,model.gF,model.B0,model.hwidth,model.rough,lcfile,lcfilename,NUflag,magflag,lcid,ylims,x,plot_artificial_lcs)
+%% %results = AD_UNCORRECT(root_dir,date,target,obj_filename,V,F,FN,FNA,model.t0,model.lam,model.bet,model.p,model.omega,model.gF,model.B0,model.hwidth,model.rough,lcfile,lcfilename,NUflag,magflag,lcid,ylims,x,plot_artificial_lcs)
+
+results = AD_UNCORRECT(root_dir,date,target,obj_filename,V,F,FN,FNA,T0,lambda,beta,P,omega,gF,B0,hwidth,rough,lcfile,lcfilename,NUflag,magflag,lcid,ylims,x,plot_artificial_lcs)
+
+

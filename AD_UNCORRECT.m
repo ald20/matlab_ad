@@ -347,7 +347,7 @@ for lightcurveNo=lightcurveNo:numberOfLightcurves
         %Hapke Scattering
         scatteringmodel = sum( ( (omega/(4*pi) ) .* FNA .* OVER .* ( BPPF + H1 .* H2 - 1) * cosd(rough) ) );
         scatteringmodel =-2.5*log10(scatteringmodel);
-        scatteringmodel=0;
+        %scatteringmodel=0;
 
         SL_illumination= -2.5*log10((area_illuminated)) ;
         SLS_illumination=-2.5*log10(SLS);
@@ -376,7 +376,7 @@ for lightcurveNo=lightcurveNo:numberOfLightcurves
     %Iterate over each data point in the lightcurve
     %Much of this loop is identical to the previous loop.  However, we're
     %iterating over the lightcurve data points now so that we can do a
-    %straight compairsion to the artifical curves and teh observed data
+    %straight comparsion to the artifical curves and thh observed data
     %points
     
      matrixForThePurposeOfScaling=[];
@@ -477,14 +477,12 @@ sizeFN=size(FNA);
         area_illuminated = sum(FNA.*musmue);
         SLS = sum((FNA.*OVER));
         scatteringmodel = sum( ( (omega/(4*pi)) .*FNA.* OVER .* ( BPPF + (H1 .* H2) - 1) * cosd(rough) ) );
-        scatteringmodel =-2.5*log10(scatteringmodel);
-        SL_illumination= -2.5*log10((area_illuminated)) ;
-        SLS_illumination=-2.5*log10(SLS);
-        
-        
+        scatteringmodel = -2.5*log10(scatteringmodel);
+        SL_illumination = -2.5*log10((area_illuminated)) ;
+        SLS_illumination =-2.5*log10(SLS);
         SLLS_illumination=-2.5*log10(SLS+omega*area_illuminated);
                
-        artificalLightcurveData(i,1:8) = [t-T0,plotphase,SL_illumination,SLS_illumination,scatteringmodel,phase,lightcurveNo,area_illuminated];
+        artificalLightcurveData(i,1:8) = [t-T0,plotphase,SL_illumination,SLS_illumination,scatteringmodel,phase,lightcurveNo,SLLS_illumination];%area_illuminated];
         
         %This matrix holds the artifical curve produced at each datapoint.
         %It is used in scaling the lightcurves
@@ -492,7 +490,6 @@ sizeFN=size(FNA);
         matrixForThePurposeOfScaling(j,1:8) = [t-T0,plotphase,SL_illumination,SLS_illumination,scatteringmodel,phase,lightcurveNo,SLLS_illumination];
         
         i=i+1;
-        
         
         results.angle2sun=[results.angle2sun angle2sun];
         results.angle2earth=[results.angle2earth  angle2earth];
@@ -533,7 +530,7 @@ sizeFN=size(FNA);
     ids = [0 0 1 2  3 0 0 5];
    
     
-     matrixForThePurposeOfScaling(matrixForThePurposeOfScaling(:,7)==lightcurveNo,x) =  matrixForThePurposeOfScaling(matrixForThePurposeOfScaling(:,7)==lightcurveNo,x)...
+    matrixForThePurposeOfScaling(matrixForThePurposeOfScaling(:,7)==lightcurveNo,x) =  matrixForThePurposeOfScaling(matrixForThePurposeOfScaling(:,7)==lightcurveNo,x)...
        - scales(lightcurveNo,ids(x));
    
     phasedDatareturnMatrix = [phasedDatareturnMatrix;matrixForThePurposeOfScaling];
@@ -545,7 +542,6 @@ sizeFN=size(FNA);
        - scales(lightcurveNo,2);
     artificalLightcurveData(artificalLightcurveData(:,7)==lightcurveNo,5) = artificalLightcurveData(artificalLightcurveData(:,7)==lightcurveNo,5) ... 
        - scales(lightcurveNo,3);
-   
     artificalLightcurveData(artificalLightcurveData(:,7)==lightcurveNo,8) = artificalLightcurveData(artificalLightcurveData(:,7)==lightcurveNo,8) ... 
        - scales(lightcurveNo,5);
 
@@ -560,10 +556,10 @@ sizeFN=size(FNA);
    % make list of points on the lightcurve for generating observational LC
    pointOnLC{lightcurveNo} = matrixForThePurposeOfScaling(:,x)
    
-   %Plot the model lightcurve
+   %% Plot the model lightcurve
    if plot_artificial_lcs==1
     
-   %Set up plot.
+       %Set up plot.
        plotfigure=figure('PaperSize',[20.984 20.984]);
        set(0,'defaulttextinterpreter','latex')
        
@@ -592,17 +588,26 @@ sizeFN=size(FNA);
    
        
       plot(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),2),(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),x)), 'Color','black');
-       set(gca,'TickLabelInterpreter','latex')
+
+      set(gca,'TickLabelInterpreter','latex')
 
        set(gca,'FontName','Helvetica','FontSize',16);
        %set(gca,'FontName','Helvetica')
 
        hold on
+       
+      % Lambertian
+      plot(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),2),(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),3)),'LineStyle',':','Color',CBblue);
+      % Lommel-Seeliger
+      plot(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),2),(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),4)),'LineStyle','-.','Color',CBred);
+      % Combined LS, Lam
+      plot(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),2),(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),8)),'LineStyle','-.','Color',CBgreen);
 
+      
        %Plot the observed data
 
        %errbar(LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,12),LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,10),LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,11),'Color', [0.6350 0.0780 0.1840]);
-       plot(LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,12),LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,10),'x','LineStyle','none','LineWidth',1.1, 'MarkerFaceColor',CBblue, 'Color',CBblue, 'Markersize', 12);
+       %%%%%%%%%%plot(LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,12),LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,10),'x','LineStyle','none','LineWidth',1.1, 'MarkerFaceColor',CBblue, 'Color',CBblue, 'Markersize', 12);
 
       % plot the individual brightnesses calculated for each distinct epoch
       % should lie on the LC
@@ -619,8 +624,8 @@ sizeFN=size(FNA);
        startday = LCSfileVariable(LCSfileVariable(:,9)==lightcurveNo,1);
 
        dates=datefromjd(startday(1)); 
-
-
+       
+       
        %Various title parameters
        %      if lcinit > 0
        %title(strcat(num2str(lcinit),'---',num2str(years(1)),' --- ', num2str(startday(1))));
@@ -654,6 +659,8 @@ sizeFN=size(FNA);
 
        format long;
        hold off
+
+       legend({'Hapke','Lambert', 'L-S', ['LS+'+string(omega)+'L']}, 'Interpreter', 'latex', 'Fontsize', 10, 'Location', 'southwest')
        
        print(plotfigure,'-dpdf',filename);
        close(plotfigure)
@@ -675,4 +682,4 @@ results.pointOnLightCurve = pointOnLC'
 results.phaseangle = phaseangle;
 results.aspectAngle = aspect;
 
-
+end
