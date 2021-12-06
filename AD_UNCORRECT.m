@@ -1,4 +1,4 @@
-function results = AD_UNCORRECT(root_dir,date,target,obj_filename,V,F,FN,FNA,T0,lambda,beta,P,omega,gF,B0,hwidth,rough,lcfile,lcfilename,NUflag,magflag,lcid,ylims,x,plot_artificial_lcs)
+function results = AD_UNCORRECT(root_dir,date,target,obj_filename,V,F,FN,FNA,T0,lambda,beta,P,omega,gF,B0,hwidth,rough,lcfile,lcfilename,NUflag,magflag,lcid,ylims,x,plot_artificial_lcs,pics_file)
 
 % This function generates artificial lightcurves for a given shape model
 % At the epochs listed, and calculates the relative magnitude shift 
@@ -97,7 +97,7 @@ l=1;
 m=0;
 
 %Number of data points in the lightcurve variable
-numberOfPoints = size(LCSfileVariable);
+numberOfPoints = size(LCSfileVariable)
 
 %Number of Lightcurves in the datafile.
 numberOfLightcurves = LCSfileVariable(numberOfPoints(1),9);
@@ -197,7 +197,7 @@ for lightcurveNo=lightcurveNo:numberOfLightcurves
     while t <= time1
         
         counter = counter+1;
-        percentage_complete = (counter/(lcmax*(stepsize+1)))*100
+        percentage_complete = round((counter/(numberOfLightcurves*(stepsize+1)))*100,4)
         %Time difference between t and the initial time
         diff = t - T0;
                 
@@ -556,17 +556,7 @@ sizeFN=size(FNA);
    % make list of points on the lightcurve for generating observational LC
    pointOnLC{lightcurveNo} = matrixForThePurposeOfScaling(:,x)
    
-   %% Plot the model lightcurve
-   if plot_artificial_lcs==1
-    
-       %Set up plot.
-       plotfigure=figure('PaperSize',[20.984 20.984]);
-       set(0,'defaulttextinterpreter','latex')
-       
-       %Order the lightcurve according to phase.
-       artificalLightcurveData = sortrows(artificalLightcurveData,2);
-       
-       %Determine the maximum and minimum model lightcurve values.
+   %Determine the maximum and minimum model lightcurve values.
        ymaxModel(2) = max(artificalLightcurveData(artificalLightcurveData(:,7)==lightcurveNo,4));
        yminModel(2) = min(artificalLightcurveData(artificalLightcurveData(:,7)==lightcurveNo,4));
        ymaxModel(1) = max(artificalLightcurveData(artificalLightcurveData(:,7)==lightcurveNo,3));
@@ -585,6 +575,19 @@ sizeFN=size(FNA);
        ymax=max([max(ymaxModel),-min(yminModel)])*1.25;
        
        ymin=-ymax;
+       
+       delta_m = ymaxModel(ids(x))-yminModel(ids(x));
+   
+   %% Plot the model lightcurve
+   if plot_artificial_lcs==1
+    
+       %Set up plot.
+       plotfigure=figure('PaperSize',[20.984 20.984]);
+       set(0,'defaulttextinterpreter','latex')
+       
+       %Order the lightcurve according to phase.
+       artificalLightcurveData = sortrows(artificalLightcurveData,2);
+      
    
        
       plot(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),2),(artificalLightcurveData((artificalLightcurveData(:,7)==lightcurveNo),x)), 'Color','black');
@@ -643,24 +646,24 @@ sizeFN=size(FNA);
           
         text(0.56,0.06,['Aspect Angle = $' num2str(aspect(lightcurveNo),'%.1f') '^{\circ}$'],'Interpreter','latex','FontName','Helvetica','FontSize',12,'Units','normalized')
         text(0.56,0.12,['Phase Angle = $' num2str(phaseangle(lightcurveNo)*180/pi,'%.2f') '^\circ$'],'Interpreter','latex','FontName','Helvetica','FontSize',12,'Units','normalized')
-
+        
         %text(0.06,0.06,['Phase Angle = $' num2str(phaseangle(lightcurveNo)*180/pi,'%.2f') '^\circ$'],'Interpreter','latex','FontName','Helvetica','FontSize',12,'Units','normalized')
-        text(0.06,0.94,['Model Peak-to-peak = $' num2str(ymaxModel(ids(x))-yminModel(ids(x)),'%.2f') '^m$'],'Interpreter','latex','FontName','Helvetica','FontSize',12,'Units','normalized')
+        text(0.06,0.94,['Model Peak-to-peak = $' num2str(delta_m,'%.2f') '^m$'],'Interpreter','latex','FontName','Helvetica','FontSize',12,'Units','normalized')
 
         %Reverse the direction of the yaxis
         set(gca,'YDir','reverse');
 
         if lcinit > 0
-            filename = strcat(dir,'pictures/',dataset,'_',num2str(lcinit,'%02d'))
+            filename = strcat(dir,pics_file,dataset,'_',num2str(lcinit,'%02d'))
         else
-            filename = strcat(dir,'pictures/',dataset,'_',num2str(lightcurveNo,'%02d'))
+            filename = strcat(dir,pics_file,dataset,'_',num2str(lightcurveNo,'%02d'))
 
         end
 
        format long;
        hold off
 
-       legend({'Hapke','Lambert', 'L-S', ['LS+'+string(omega)+'L']}, 'Interpreter', 'latex', 'Fontsize', 10, 'Location', 'southwest')
+       legend({'Hapke','Lambert', 'L-S', ['L-S+'+string(omega)+'L']}, 'Interpreter', 'latex', 'Fontsize', 10, 'Location', 'southwest')
        
        print(plotfigure,'-dpdf',filename);
        close(plotfigure)
@@ -677,9 +680,10 @@ toc
 %correction = sortrows(correction,1);
 % results.correction=correction;
 results.pointOnLightCurve = pointOnLC'
-%results.datapoints = phasedDatareturnMatrix;
-%results.MikkoFile = LCSfileVariable;
+results.datapoints = phasedDatareturnMatrix;
+results.MikkoFile = LCSfileVariable;
 results.phaseangle = phaseangle;
 results.aspectAngle = aspect;
+results.deltam = delta_m
 
 end
