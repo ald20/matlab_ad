@@ -9,7 +9,7 @@ plot_artificial_lcs = 0;
 
 % Object name params
 target = '67P';
-date='20211206_14';
+date='20211206_11';
 %obj_filename = strcat(target,'_',int2str(lam),'_', int2str(bet),namecore,'.obj');
 
 obj_filename = 'cg_spc_shap8_003k_cart.wrl'
@@ -39,7 +39,7 @@ end
 model.t0 = 2459953
 model.lam = 79;
 model.bet = 42;
-model.p= 14.7 % SHAP8 val: 12.4041h
+model.p= 11.1 % SHAP8 val: 12.4041h
 % Hapke scattering factors: Fornasier 2015 649nm (SPG)
 model.omega = 0.1;
 model.gF = -0.41;

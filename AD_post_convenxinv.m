@@ -13,10 +13,10 @@ clc;
 
 % Run the first one, two or all three of these tasks by changing the ntask
 % variable
-ntask = 1;
+ntask = 2;
 
 target='162P'
-date='20210907'
+date='20220428'
 
 % root_dir: folder containing current work & pictures folder
 % lc_generator saves images into root_dir/pictures/artifical_lcs
@@ -24,21 +24,21 @@ date='20210907'
 % to file names!
 
 root_dir='~/Documents/year1/shape_modelling/162p/'
-directory = [ root_dir ]%'dist_cal_pole_scan/pole_scan_k_-1.8_free/small_grids/run_280_10_convergence/' ] 
+directory = [ root_dir 'pole_scan/']%'pre_2022/dist_cal_pole_scan/run_0_-90_2021_06_01/' ] 
 
-%% Read in the lightcurve
- 
-lcdir = '~/Documents/year1/shape_modelling/162p/'
-lctarget = '162P'
-lcfile='LC_dist_cal_NU'
-lcfilename= strcat(lcdir, lctarget,'_', lcfile, '.dat' );
-
-% Directory in which to save artificial lcs (2xN_LCs generated if lc=0)
-% alc_pics = [ root_dir 'pictures/' date '/artificial_lcs/' ]
+% %% Read in the lightcurve
+%  
+% lcdir = '~/Documents/year1/shape_modelling/162p/'
+% lctarget = '162P'
+% lcfile='LC_dist_cal_NU'
+% lcfilename= strcat(lcdir, lctarget,'_', lcfile, '.dat' );
 % 
-% if ~exist(alc_pics, 'dir')
-%     mkdir(alc_pics)
-% end
+% % Directory in which to save artificial lcs (2xN_LCs generated if lc=0)
+% % alc_pics = [ root_dir 'pictures/' date '/artificial_lcs/' ]
+% % 
+% % if ~exist(alc_pics, 'dir')
+% %     mkdir(alc_pics)
+% % end
 
 %% Read in the .obj file
 
@@ -46,10 +46,10 @@ lcfilename= strcat(lcdir, lctarget,'_', lcfile, '.dat' );
 % to file names!
 
 % lam_beta:1.5611
-modstr='300_38';
+modstr='_100_-50';
 % object file:
-objfilename = [directory target '_' modstr '.obj'];
-parfilename = [directory 'output_convex_pars_' modstr '_BS' ];
+objfilename = [directory target modstr '.obj'];
+%parfilename = [directory 'output_convex_pars_' modstr '_BS' ];
 
 % If plotting nononvex wrl file: include n, the number of digits in the
 % number of facets
@@ -112,7 +112,7 @@ end
  if ntask == 2 || ntask == 3
      % Set up some parameters
      diffstr=0.7; specularstr=0.1;
-     alignx=0;
+     alignx=1;
 
 
      %[ filename, plotfigure ] = plot_shape_publication(V, F, root_dir, target, modstr, date, diffstr, specularstr, alignx);
@@ -210,7 +210,7 @@ if ntask == 3
      lcres=Lightcurve_Generator_Conv_v3(FN,FNA,LCS_all,model.t0,model.lam,model.bet,model.p,0,0,0,0,0,x,yorp,namecore,lcid,0,0,ylims,root_dir,alc_pics);
 end
 
-close all
+%close all
 
 % %% Plotting plane-of-sky projections with correct illumination
 % 
